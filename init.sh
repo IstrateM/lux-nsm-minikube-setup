@@ -101,7 +101,6 @@ sudo mkdir -p /usr/local/bin/
 sudo install minikube /usr/local/bin/
 
 #Add luxoft certificate to minikube
-
 sudo cp /usr/local/share/ca-certificates/luxoft/luxoft_root_ca.crt ~/.minikube/files/etc/ssl/certs/luxoft_root_ca.crt
 
 #Start minikube

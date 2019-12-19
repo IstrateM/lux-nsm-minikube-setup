@@ -5,4 +5,4 @@ kubectl get pods
 #Delete pod
 kubectl delete pods/kuard
 #Deploy selenium yaml pod
-kubectl apply -f selenium.yaml
+kubectl apply -f web_server.yaml

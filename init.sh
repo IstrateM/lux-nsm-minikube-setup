@@ -1,10 +1,10 @@
 #!/bin/bash
 #Script used to quicly set-up minikube on Ubuntu 18.04
 # Generate Luxoft certificate
-echo -n | openssl s_client -showcerts -connect dl.k8s.io:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > kube.chain.pem
+echo -n | openssl s_client -showcerts -connect dl.k8s.io:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >kube.chain.pem
 
 # Extract the last certificate
-csplit -f htf kube.chain.pem '/-----BEGIN CERTIFICATE-----/' '{*}' | sudo cat $(ls htf* | sort | tail -1) > luxoft_root_ca.crt && rm -rf htf*
+csplit -f htf kube.chain.pem '/-----BEGIN CERTIFICATE-----/' '{*}' | sudo cat $(ls htf* | sort | tail -1) >luxoft_root_ca.crt && rm -rf htf*
 
 #Remove any existing docker app
 sudo apt-get remove docker docker-engine docker.io containerd runc
@@ -14,20 +14,18 @@ sudo apt-get update
 
 #Install packages to allow apt to use a repository over HTTPS
 sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
+  apt-transport-https \
+  ca-certificates \
+  curl \
+  gnupg-agent \
+  software-properties-common
 
 #Add Docker's official GPG key
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 #Set-up stable repository
 sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
+  "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 #Install docker engine
 sudo apt-get install docker-ce docker-ce-cli containerd.io
@@ -49,7 +47,7 @@ sudo apt-get install -y kubectl
 
 #Add source to /etc/apt/sources.list
 #deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian <mydist> contrib
-echo 'deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bionic contrib' >> /etc/apt/sources.list
+echo 'deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian bionic contrib' >>/etc/apt/sources.list
 
 #Download and register keys to oracle vbox
 wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
@@ -63,8 +61,8 @@ sudo apt-get install virtualbox-6.0
 virsh list --all
 
 #Install Minikube
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
-  && chmod +x minikube
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 &&
+  chmod +x minikube
 
 #Add minikube executable to path
 sudo mkdir -p /usr/local/bin/
@@ -79,5 +77,3 @@ sudo reboot
 
 #Start minikube
 #minikube start --vm-driver=virtualbox
-
-

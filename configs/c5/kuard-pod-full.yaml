@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kuard
+spec:
+  volumes:
+    - name: "kuard-data"
+      nfs:
+        server: my.nfs.server.local
+        path: "/exports"
+  containers:
+    - name: kuard
+      image: gcr.io/kuard-demo/kuard-amd64:1
+      ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "128Mi"
+        limits:
+          cpu: "1000m"
+          memory: "256Mi"
+      volumeMounts:
+        - mountPath: "/data"
+          name: "kuard-data"
+      livenessProbe:
+        httpGet:
+          port: 8080
+          path: /healthy
+        initialDelaySeconds: 5
+        timeoutSeconds: 1
+        periodSeconds: 10
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          port: 8080
+          path: /ready
+        initialDelaySeconds: 30
+        timeoutSeconds: 1
+        periodSeconds: 10
+        failureThreshold: 3
